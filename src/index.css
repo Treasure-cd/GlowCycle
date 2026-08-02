@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-muted: var(--primary-muted);
+  
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+}
+
+@layer base {
+  :root {
+    --bg: #ffffff;
+    --fg: #0f172a;
+    --primary: #7c3aed; 
+    --primary-hover: #6d28d9;
+    --primary-muted: #f5f3ff;
+    
+    --surface: #f8fafc;
+    --border: #e2e8f0;
+  }
+
+  .dark {
+    --bg: #09090b; 
+    --fg: #f8fafc; 
+    --primary: #a78bfa; 
+    --primary-hover: #c4b5fd;
+    --primary-muted: #2e1065;
+    
+    --surface: #18181b;
+    --border: #27272a;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: Raleway;
+  }
+}

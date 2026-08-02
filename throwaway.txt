@@ -1,0 +1,39 @@
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in
+    const uid = user.uid;
+    console.log("Logged in user:", user.email);
+  } else {
+    // User is signed out
+  }
+});
+
+
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
+
+const handleSignUp = async (email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log("Registered:", user);
+  } catch (error) {
+    console.error("Error signing up:", error.message);
+  }
+};
+
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
+
+const handleLogin = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log("Logged in:", user);
+  } catch (error) {
+    console.error("Error logging in:", error.message);
+  }
+};

@@ -1,0 +1,17 @@
+Day 1–2
+
+    Set up Vite + React + Firebase + Tailwind.
+
+    Implement:
+
+        Auth (email/password).
+
+        User profile (last period, cycle length, location).
+
+        Firestore schema (users, skin_scans, journal_entries if you want).
+
+    Integrate YouCam Skin Analysis (file→task→poll flow).
+
+
+- firebase
+- repo
