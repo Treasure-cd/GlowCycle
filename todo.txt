@@ -1,7 +1,4 @@
 Day 1–2
-
-    Set up Vite + React + Firebase + Tailwind.
-
     Implement:
 
         Auth (email/password).
@@ -13,5 +10,8 @@ Day 1–2
     Integrate YouCam Skin Analysis (file→task→poll flow).
 
 
-- firebase
-- repo
+- So, handle auth stuff
+- After auth, there'll be a thing, always (incase you skipped onboarding, but it's also right after auth) to check if a profile with that user id exists
+- which could mean extra details, like full name.
+- other extra details would be: birth year, first day of last period, how the weather is looking like.
+- which means we need a firestore bit for user deets.
