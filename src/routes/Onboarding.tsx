@@ -44,7 +44,7 @@ export default function Onboarding() {
     setSubmitting(true);
     try {
       await createUserProfile(uid, data);
-      navigate("/dashboard");
+      navigate("/skin-scan")
     } catch (err) {
       console.error(err);
       setSubmitting(false);

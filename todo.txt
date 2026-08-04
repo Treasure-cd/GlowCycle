@@ -1,17 +1,21 @@
 Day 1–2
     Implement:
-
-        Auth (email/password).
-
-        User profile (last period, cycle length, location).
-
         Firestore schema (users, skin_scans, journal_entries if you want).
 
     Integrate YouCam Skin Analysis (file→task→poll flow).
 
+Day 3–4
 
-- So, handle auth stuff
-- After auth, there'll be a thing, always (incase you skipped onboarding, but it's also right after auth) to check if a profile with that user id exists
-- which could mean extra details, like full name.
-- other extra details would be: birth year, first day of last period, how the weather is looking like.
-- which means we need a firestore bit for user deets.
+    Build:
+
+        Onboarding flow (profile + first skin scan).
+
+        Dashboard:
+
+            Phase + cycle day.
+
+            Latest skin scores.
+
+            1–2 insights.
+
+    Implement cycle phase calculator.

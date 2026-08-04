@@ -4,6 +4,7 @@ import LandingPage from './routes/LandingPage';
 import Auth from './routes/Auth';
 import NotFound from './routes/NotFound';
 import Onboarding from './routes/Onboarding';
+import SkinScan from './routes/SkinScan';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Auth />} />
             <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/skinscan" element={<SkinScan />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
