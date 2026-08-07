@@ -136,6 +136,8 @@ export async function pollSkinAnalysisTask(
     );
 
     const { status, results } = response.data;
+    console.log("Status: ", status);
+    console.log("Results: ", results)
 
     if (status === "success") {
       return results ?? [];

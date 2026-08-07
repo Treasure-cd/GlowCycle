@@ -1,4 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { ProtectedRoute, OnboardingRoute, GuestRoute } from './lib/routeGuards';
+
 import Home from './routes/Home';
 import LandingPage from './routes/LandingPage';
 import Auth from './routes/Auth';
@@ -6,39 +9,79 @@ import NotFound from './routes/NotFound';
 import Onboarding from './routes/Onboarding';
 import SkinScan from './routes/SkinScan';
 
-const App = () => {
+
+const Navbar = () => {
+  const { user } = useAuth();
+
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-background text-foreground font-sans">
-        
-        {/* Simple Navigation */}
-        <nav className="flex items-center gap-6 p-4 border-b border-border bg-surface">
-          <Link to="/" className="text-xl font-bold text-primary hover:text-primary-hover transition-colors">
-            GlowCycle
+    <nav className="flex items-center gap-6 p-4 border-b border-border bg-surface">
+      <Link to="/" className="text-xl font-bold text-primary hover:text-primary-hover transition-colors">
+        GlowCycle
+      </Link>
+      
+      <div className="flex gap-4">
+        {user ? (
+          <Link to="/dashboard" className="hover:text-primary transition-colors">
+            Tracker
           </Link>
-          <div className="flex gap-4">
-            <Link to="/tracker" className="hover:text-primary transition-colors">
-              Tracker
+        ) : (
+          <>
+            <Link to="/" className="hover:text-primary transition-colors">
+              Get Started
             </Link>
-            <Link to="/login" className="hover:text-primary transition-colors">
+            <Link to="/auth" className="hover:text-primary transition-colors">
               Login
             </Link>
-          </div>
-        </nav>
-
-        <main>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<Auth />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/skinscan" element={<SkinScan />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        
+          </>
+        )}
       </div>
-    </BrowserRouter>
+    </nav>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <div className="min-h-screen bg-background text-foreground font-sans">
+          
+          <Navbar />
+
+          <main>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="*" element={<NotFound />} />
+              
+
+              <Route path="/auth" element={
+                <GuestRoute>
+                  <Auth />
+                </GuestRoute>
+              } />
+
+
+              <Route path="/onboarding" element={
+                <OnboardingRoute>
+                  <Onboarding />
+                </OnboardingRoute>
+              } />
+
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              } />
+              <Route path="/skinscan" element={
+                <ProtectedRoute>
+                  <SkinScan />
+                </ProtectedRoute>
+              } />
+            </Routes>
+          </main>
+          
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 
