@@ -18,9 +18,9 @@
   :root {
     --bg: #ffffff;
     --fg: #0f172a;
-    --primary: #7c3aed; 
-    --primary-hover: #6d28d9;
-    --primary-muted: #f5f3ff;
+    --primary: #9D2360;
+    --primary-hover: #7E1B4D;
+    --primary-muted: #FDF1F7;
     
     --surface: #f8fafc;
     --border: #e2e8f0;
@@ -29,9 +29,9 @@
   .dark {
     --bg: #09090b; 
     --fg: #f8fafc; 
-    --primary: #a78bfa; 
-    --primary-hover: #c4b5fd;
-    --primary-muted: #2e1065;
+    --primary: #E58BB5;
+    --primary-hover: #EFA8C8;
+    --primary-muted: #3D1229;
     
     --surface: #18181b;
     --border: #27272a;
@@ -40,6 +40,43 @@
   body {
     background-color: var(--bg);
     color: var(--fg);
-    font-family: Raleway;
+    font-family: Lato;
+  }
+}
+
+@layer utilities {
+  .animate-slide-up {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0; /* Keeps it hidden before animation starts */
+  }
+  
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  .delay-600 { animation-delay: 600ms; }
+  .delay-700 { animation-delay: 700ms; }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0; 
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); } /* Slight scale up looks great */
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

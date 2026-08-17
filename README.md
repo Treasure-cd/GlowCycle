@@ -18,7 +18,6 @@ GlowCycle solves that by bringing skin analysis, cycle tracking, and climate-awa
 - **Climate-aware skincare guidance** for humid/tropical and dry/non-tropical conditions.
 - **Routine builder** with AM and PM steps tailored to the user.
 - **Product suggestions** based on skin concern, actives, and price tier.
-- **Color analysis and style guidance** for a broader glow-up experience.
 - **Journal and progress tracking** to monitor changes over time.
 
 ## Hackathon alignment

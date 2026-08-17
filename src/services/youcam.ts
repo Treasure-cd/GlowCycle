@@ -118,7 +118,7 @@ interface SkinAnalysisPollResponse {
   status: number;
   data: {
     task_id: string;
-    status: SkinAnalysisTaskStatus;
+    task_status: SkinAnalysisTaskStatus;
     results?: SkinAnalysisResultItem[];
   };
 }
@@ -135,16 +135,22 @@ export async function pollSkinAnalysisTask(
       { method: "GET" }
     );
 
-    const { status, results } = response.data;
-    console.log("Status: ", status);
-    console.log("Results: ", results)
+    // CHANGE 'status' to 'task_status' here
+    const { task_status, results } = response.data; 
+    console.log("Status: ", task_status);
+    console.log("Results: ", results);
 
-    if (status === "success") {
+    // CHANGE 'status' to 'task_status' in these checks
+    if (task_status === "success") {
       return results ?? [];
     }
 
-    if (status === "error") {
-      throw new Error(`Skin analysis task ${taskId} failed`);
+if (task_status === "error") {
+      // Let's dump the exact error payload from YouCam to the console
+      console.error("YOUCAM ENGINE ERROR PAYLOAD:", response.data);
+      
+      const errorMessage = (response.data as any).error_message || (response.data as any).error || "Check console for details";
+      throw new Error(`Skin analysis task failed: ${errorMessage}`);
     }
 
     // status === "running" — wait and check again
@@ -152,4 +158,94 @@ export async function pollSkinAnalysisTask(
   }
 
   throw new Error(`Skin analysis task ${taskId} timed out after ${MAX_POLL_ATTEMPTS} attempts`);
+}
+export async function runFullSkinAnalysisFlow(
+  file: File, 
+  actions: string[],
+  onLog: (message: string, data?: any) => void
+): Promise<SkinAnalysisResultItem[] | null> {
+  try {
+    onLog("Step 1: Requesting upload URL for file...", { name: file.name, size: file.size });
+    const { fileId, uploadUrl, uploadHeaders } = await requestUploadUrl(file);
+    onLog("Step 1 Complete. Got File ID:", { fileId, uploadUrl });
+
+    onLog("Step 2: Uploading image binary to YouCam...");
+    await uploadImage(uploadUrl, uploadHeaders, file);
+    onLog("Step 2 Complete. Image successfully uploaded.");
+
+    
+    onLog("Step 3: Starting analysis task...", { fileId, actions });
+    const taskId = await startSkinAnalysisTask(fileId, actions);
+    onLog("Step 3 Complete. Task started with ID:", taskId);
+
+    onLog("Step 4: Polling for results (this may take a few seconds)...");
+    const results = await pollSkinAnalysisTask(taskId);
+    onLog("Step 4 Complete. Final Results received!", results);
+
+    return results;
+  } catch (error) {
+    onLog("ERROR in Analysis Flow:", error);
+    console.error(error);
+    return null;
+  }
+}
+
+export interface SkinScores {
+  acne: number;
+  oiliness: number;
+  moisture: number;
+  redness: number;
+  texture: number;
+  overall: number;
+  skinAge: number;
+}
+
+export function parseYouCamResults(rawPayload: any): SkinScores {
+  const scores: SkinScores = {
+    acne: 100,
+    oiliness: 100,
+    moisture: 100,
+    redness: 100,
+    texture: 100,
+    overall: 100,
+    skinAge: 0,
+  };
+  const resultsArray = Array.isArray(rawPayload) 
+    ? rawPayload 
+    : rawPayload?.output;
+
+  if (!Array.isArray(resultsArray)) {
+    console.warn("parseYouCamResults received invalid data shape:", rawPayload);
+    return scores;
+  }
+
+  resultsArray.forEach((item) => {
+    if (!item || !item.type) return;
+
+    switch (item.type) {
+      case "acne":
+        scores.acne = item.ui_score ?? scores.acne;
+        break;
+      case "oiliness":
+        scores.oiliness = item.ui_score ?? scores.oiliness;
+        break;
+      case "moisture":
+        scores.moisture = item.ui_score ?? scores.moisture;
+        break;
+      case "redness":
+        scores.redness = item.ui_score ?? scores.redness;
+        break;
+      case "texture":
+        scores.texture = item.ui_score ?? scores.texture;
+        break;
+      case "all":
+        scores.overall = item.score ?? scores.overall;
+        break;
+      case "skin_age":
+        scores.skinAge = item.score ?? scores.skinAge;
+        break;
+    }
+  });
+
+  return scores;
 }

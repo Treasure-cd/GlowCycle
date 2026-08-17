@@ -32,12 +32,13 @@ export const OnboardingRoute = ({ children }: RouteProps) => {
 export const GuestRoute = ({ children }: RouteProps) => {
   const { user, userData, loading } = useAuth();
 
-  if (loading) return null;
+if (loading) return null;
   
   if (user) {
-    if (userData && !userData.onboardingComplete) return <Navigate to="/onboarding" replace />;
+    if (!userData || !userData.onboardingComplete) return <Navigate to="/onboarding" replace />;
+    
     return <Navigate to="/dashboard" replace />;
   }
-  
+
   return children;
 };

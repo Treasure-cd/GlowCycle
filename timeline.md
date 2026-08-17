@@ -2,8 +2,8 @@
 
 ## 1. Tech Stack
 
-- Frontend: React + Vite
-- Styling: Tailwind CSS or plain CSS
+- Frontend: Typescript + React + Vite
+- Styling: Tailwind CSS
 - Auth / DB: Firebase Auth + Firestore
 - Charts: Recharts
 - API calls: native fetch
@@ -18,6 +18,7 @@ src/
   components/
   data/
   lib/
+  api/
   pages/
   styles/
 ```
@@ -178,6 +179,13 @@ export function generateRoutine(phase, scores) {
   const base = BASE_ROUTINES[phase] || BASE_ROUTINES.follicular;
   const am = JSON.parse(JSON.stringify(base.am));
   const pm = JSON.parse(JSON.stringify(base.pm));
+
+  if (weather.humidity < 40 && weather.temp < 15) {
+      am.find(step => step.type === 'moisturizer').label = "Ceramide-rich heavy moisturizer";
+      am.find(step => step.type === 'moisturizer').focus = "barrier-repair";
+  } else if (weather.humidity > 70 && weather.temp > 25) {
+      am.find(step => step.type === 'moisturizer').label = "Lightweight gel moisturizer";
+  }
 
   if (scores.acne.ui_score < 60) {
     pm.push({

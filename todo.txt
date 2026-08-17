@@ -19,3 +19,7 @@ Day 3–4
             1–2 insights.
 
     Implement cycle phase calculator.
+
+
+Rules.
+When you go to an auth page or an onboarding page, you get redirected to /dashboard if you are a user.

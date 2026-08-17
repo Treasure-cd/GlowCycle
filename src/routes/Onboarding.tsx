@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../lib/firebase";
-import { createUserProfile } from "../lib/firestore";
+import { auth } from "../services/firebase";
+import { createUserProfile } from "../services/firestore";
 import AboutYouStep from "../components/onboarding/AboutYouStep";
 import LastPeriodStep from "../components/onboarding/LastPeriodStep";
 import ClimateStep from "../components/onboarding/ClimateStep";
+import OnboardingLayout from "../components/onboarding/OnboardingLayout";
 
 export interface OnboardingData {
   fullName: string;
@@ -44,7 +45,7 @@ export default function Onboarding() {
     setSubmitting(true);
     try {
       await createUserProfile(uid, data);
-      navigate("/skin-scan")
+      navigate("/skinscan")
     } catch (err) {
       console.error(err);
       setSubmitting(false);
@@ -52,16 +53,8 @@ export default function Onboarding() {
   }
 
   return (
-    <div className="onboarding-page">
-      <div className="progress-bar">
-        {steps.map((s, i) => (
-          <span key={s} className={i <= step ? "dot active" : "dot"} />
-        ))}
-      </div>
-
-      {step === 0 && (
-        <AboutYouStep data={data} setField={setField} onNext={next} />
-      )}
+    <OnboardingLayout step={step} totalSteps={steps.length}>
+      {step === 0 && <AboutYouStep data={data} setField={setField} onNext={next} />}
       {step === 1 && (
         <LastPeriodStep data={data} setField={setField} onNext={next} onBack={back} />
       )}
@@ -74,6 +67,6 @@ export default function Onboarding() {
           submitting={submitting}
         />
       )}
-    </div>
+    </OnboardingLayout>
   );
 }
