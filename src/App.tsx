@@ -19,15 +19,26 @@ import {
   House, 
   CornersOut, 
   Drop, 
-  BookOpen 
+  BookOpen,
+  SignOut
 } from '@phosphor-icons/react';
 import ProductCheck from './routes/ProductCheck';
+import { auth } from './services/firebase'; 
+import { signOut } from 'firebase/auth';
 
 const Navbar = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  if (location.pathname.startsWith('/auth')) {
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
+  if (location.pathname.startsWith('/auth') || location.pathname.startsWith('/check')) {
     return (
       <div className="absolute top-0 left-0 z-50 p-6">
         <Link 
@@ -73,8 +84,17 @@ const Navbar = () => {
                 </Link>
               </div>
               
-              {/* Theme Toggle - Visible on all screens */}
-              <ThemeToggle />
+              {/* Theme Toggle & Logout - Visible on all screens */}
+              <div className="flex items-center gap-3 md:gap-4 border-l border-border pl-3 md:pl-4">
+                <ThemeToggle />
+                <button 
+                  onClick={handleLogout}
+                  className="text-foreground/50 transition-colors hover:text-danger"
+                  title="Log out"
+                >
+                  <SignOut size={22} weight="bold" />
+                </button>
+              </div>
             </>
           ) : (
             <>
