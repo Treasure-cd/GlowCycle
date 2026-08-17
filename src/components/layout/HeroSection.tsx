@@ -49,8 +49,8 @@ export default function HeroSection() {
   );
   const playheadX = ((cycleDay - 1) / 27) * GRAPH_W;
 
-  const oilOpacity = (metrics.oiliness / 100) * 0.55;
-  const drynessOpacity = ((100 - metrics.hydration) / 100) * 0.45;
+  // const oilOpacity = (metrics.oiliness / 100) * 0.55;
+  // const drynessOpacity = ((100 - metrics.hydration) / 100) * 0.45;
 
   return (
     <section className="relative overflow-hidden bg-background">

@@ -1,4 +1,4 @@
-import type { ScanInterpretation, CyclePhase, ClimateBucket, MetricInterpretation } from "./skinRulesEngine";
+import type { ScanInterpretation } from "./skinRulesEngine";
 
 export interface RoutineRecommendation {
   coreIngredients: string[];
