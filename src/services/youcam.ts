@@ -1,11 +1,7 @@
-const YOUCAM_API_KEY = import.meta.env.VITE_YOUCAM_API_KEY as string;
-const YOUCAM_BASE_URL = "https://yce-api-01.makeupar.com";
-
 async function youcamFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const response = await fetch(`${YOUCAM_BASE_URL}${path}`, {
+  const response = await fetch(`/api/youcam?path=${encodeURIComponent(path)}`, {
     ...options,
     headers: {
-      Authorization: `Bearer ${YOUCAM_API_KEY}`,
       "Content-Type": "application/json",
       ...options.headers,
     },
@@ -18,7 +14,6 @@ async function youcamFetch<T>(path: string, options: RequestInit = {}): Promise<
 
   return response.json() as Promise<T>;
 }
-
 
 interface FileUploadResponse {
   status: number;
